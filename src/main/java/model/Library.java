@@ -2,9 +2,7 @@ package model;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -17,43 +15,37 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Library {
 
     private List<Book> availableBookList;
-
+    private ReadingRoom readingRoom;
     private static Logger logger = Logger.getLogger(Library.class);
 
-    public Library(List<Book> bookList) {
-        this.availableBookList = bookList;
+    public Library(ArrayList<Book> bookList) {
+        this.availableBookList = Collections.synchronizedList(bookList);
     }
 
     public List<Book> getAvailableBookList() {
         return availableBookList;
     }
 
-    public void setAvailableBookList(List<Book> availableBookList) {
-        this.availableBookList = availableBookList;
-    }
-
    public void returnBook(Book book){
         availableBookList.add(book);
    }
 
-   public boolean giveBook(Book book){
+   public boolean giveBook(Book book, Visitor visitor){
         logger.info("Attempt to give the book: " + book.getName());
         if (availableBookList.contains(book)) {
-            logger.info("The Book " + book.getName() + "is handed out.");
+            logger.info("The Book " + book.getName() + " is handed out to visitor " + visitor.getVisitorID());
             return availableBookList.remove(book);
         }
         else {
-            logger.error("The Book " + book.getName() + "is not available!");
+            logger.error("The Book " + book.getName() + " is not available!");
             return false;
         }
    }
 
-    public boolean giveBookList(List<Book> books) {
+    public boolean giveBookList(List<Book> books, Visitor visitor) {
         for (Book book : books) {
-           return giveBook(book);
+           return giveBook(book, visitor);
         }
         return false;
     }
-
-
 }

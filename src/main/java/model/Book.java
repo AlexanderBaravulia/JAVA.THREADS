@@ -49,13 +49,17 @@ public class Book{
             return false;
         }
         Book bookObj = (Book) obj;
-        return  name.equals(bookObj.getName()) && author.equals(bookObj.getAuthor())
-                && isReedRoomOnly == bookObj.isReedRoomOnly();
+        return  name.equals(bookObj.getName()) && author.equals(bookObj.getAuthor());
     }
 
     @Override
     public int hashCode(){
         return 13 + 17*name.hashCode() + 17* author.hashCode() + (isReedRoomOnly ? 1 : 0);
+    }
+
+    @Override
+    public String toString() {
+        return "Book [name =" + name + ", author =" + author + "]";
     }
 
 }
